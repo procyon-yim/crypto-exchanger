@@ -8,9 +8,9 @@ import random
 
 def send_alarm(mail_info, text):
     '''
-    이메일 보내주는 메소드
-    :param mail_info: (str) 메일 보내는 주소, 받는 주소, 보내는 주소의 비밀번호가 담긴 텍스트 파일 이름
-    :param text: (str) 보낼 메세지
+    This is a method that sends an alarm via email
+    :param mail_info: (str) mail.txt
+    :param text: (str) a message to be sent
     :return: None
     '''
     with open(mail_info) as f:
