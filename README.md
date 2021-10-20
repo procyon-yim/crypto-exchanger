@@ -1,6 +1,6 @@
 # crypto-exchanger
 
-This is a trading bot for cryptocurrencies exchange in South Korean exchange, Upbit. I make use of an already available API written by the Upbit.
+This is a trading bot for cryptocurrencies exchange in South Korean exchange, Upbit. I make use of an already available API written by the Upbit.(https://github.com/procyon-yim/pyupbit)
 
 **Prerequisites**
   You must have an account at Upbit (https://upbit.com/home), and an email address at www.naver.com
