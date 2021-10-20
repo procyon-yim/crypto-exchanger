@@ -4,7 +4,7 @@ username, password = login('upbit.txt')
 user = pyupbit.Upbit(username, password)
 
 coins = ['KRW-BTC', 'KRW-ETH', 'KRW-XRP', 'KRW-ADA', 'KRW-DOGE']  # list of coins to exchange
-k = 0.5  # breakout coefficient (see https://www.whselfinvest.com/en-lu/trading-platform/free-trading-strategies/tradingsystem/56-volatility-break-out-larry-williams-free)
+k = 0.5  # breakout coefficient. See Larry Williams's Volatility Breakout Strategy.
 amount = get_amount(coins)
 target_price = get_target_price(coins, k)
 start_balance  = user.get_balance()
@@ -13,11 +13,14 @@ mid = datetime.datetime(now.year, now.month, now.day) + datetime.timedelta(days=
 send_alarm('mail.txt', 'Current time is {2}, Current Balance is {0}KRW. Today\'s targets are {1}.'.format(int(start_balance), amount, now))
 
 try:
-    while True:
+    while True:  
+        # This script must run 24/7
         now = datetime.datetime.now()
 
-        if mid < now < mid + datetime.timedelta(seconds=10):
+        if mid < now < mid + datetime.timedelta(seconds=10): 
+            # Rebalances account every midnight (00:00)
             try:
+                
                 renew(user, user.get_balances())
                 coins = ['KRW-BTC', 'KRW-ETH', 'KRW-XRP', 'KRW-ADA', 'KRW-DOGE']
                 k = 0.5
@@ -33,7 +36,7 @@ try:
                 break
 
             except Exception as e:
-                send_alarm('mail.txt', 'An error occured during 00:00 process. {} Terminating MCM.'.format(e))
+                send_alarm('mail.txt', 'An error occured during midnight process. {} Terminating MCM.'.format(e))
                 break
 
         try:
@@ -42,6 +45,9 @@ try:
                 time.sleep(0.1)  # This is because you can call an Upbit API only 10 times a second
 
                 if current_price >= target_price[coin]:
+                    
+                    # The bot will buy a currency if the current price is higher than the target price.
+                    # target price = k (breakout coefficient, usually 0.5) times (yesterday's volatility)
                     qtty = amount[coin]
                     time.sleep(0.1)
 
