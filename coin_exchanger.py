@@ -9,7 +9,7 @@ import random
 def send_alarm(mail_info, text):
     '''
     This is a method that sends an alarm via email
-    :param mail_info: (str) mail.txt
+    :param mail_info: (str) a text file that contains email log-in information. See email.txt file in the repository for example.
     :param text: (str) a message to be sent
     :return: None
     '''
@@ -39,8 +39,8 @@ def send_alarm(mail_info, text):
 def get_target_price(tickers, k_value):
     '''
     This is a method that returns a target price of currencies, based on Larry Williams's Volatility breakout strategy
-    :param tickers: (list) a list of tickers (e.g. 'BTC-KRW')
-    :param k_value: (float) breakout coefficient
+    :param tickers: (list) a list of tickers (e.g. ['BTC-KRW', 'BTC-ETH'])
+    :param k_value: (float) breakout coefficient (see Larry Williams's Volatility breakout strategy)
     :return: (dict) keys = tickers, values = target price
     '''
 
@@ -95,10 +95,6 @@ def get_amount(tickers):
 def select_coin(num, major_list):
     '''
     Obsolete method
-    3대장 + 그날 투자할 랜덤 세개 뽑아주는 메소드 (8월 26일부로 안씀)
-    :param num: (int) 투자할 종목 수.
-    :param major_list: (list) 메이저 코인 목록
-    :return: (list) 투자할 코인 목록
     '''
     tickers = pyupbit.get_tickers(fiat='KRW')
 
@@ -108,7 +104,7 @@ def select_coin(num, major_list):
     for ticker in tickers:
 
         df = pyupbit.get_ohlcv(ticker, interval='minute60', to=datetime.datetime.now())
-        time.sleep(0.1)  # 호출시간 에러
+        time.sleep(0.1)
         total = 0
 
         for i in range(5):
@@ -117,14 +113,14 @@ def select_coin(num, major_list):
 
         if pyupbit.get_current_price(ticker) > moving_avg:
             if ticker in major_list:
-                candidate.insert(0, ticker)  # 머리부분에 메이져들 배치
+                candidate.insert(0, ticker)  
                 major += 1
             else:
                 candidate.append(ticker)
                 minor += 1
 
     if len(candidate) > num:
-        candidate.reverse()  # 메이저 삼대장은 맨 뒤 세군데.
+        candidate.reverse()  
         save = list()
         for i in range(major):
             save.append(candidate.pop())
@@ -158,5 +154,3 @@ def login(login_info):
     return access_key, secret_key
 
 
-print(get_amount(['KRW-BTC', 'KRW-ETH', 'KRW-XRP', 'KRW-ADA', 'KRW-DOGE']))
-print(sum(get_amount(['KRW-BTC', 'KRW-ETH', 'KRW-XRP', 'KRW-ADA', 'KRW-DOGE']).values()))
